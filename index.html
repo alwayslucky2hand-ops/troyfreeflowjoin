@@ -101,15 +101,12 @@
 
         <button id="btn-submit" onclick="submitOrder()">前往安全結帳</button>
         <span id="sys-msg" class="inline-msg"></span>
-
-        <div id="blackcat-form-container" style="display: none;"></div>
     </div>
 
     <script>
         // 您的 GAS 部署網址
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyNfJeqnU6a24SZYKJqlOfezBThwk1uIABsaxG1qvC7Ww3p3heanPF2OR4h9KuKlZOq/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxlb01-YtOhB_ZCK9ZiCm-1Ae8iztYst02RoQa2G_5dVKdffLlObanvGkzUknI553Y/exec';
 
-        // 價格設定 (已更新)
         const prices = {
             "年繳": 6000,
             "月付": 600
@@ -130,13 +127,12 @@
             const subType = document.getElementById('subType').value;
             const amount = prices[subType];
 
-            // 防呆機制
             if(!email || !name || !phone) {
                 return showMsg('sys-msg', '請填寫所有必填欄位 (*)', true);
             }
 
             const btn = document.getElementById('btn-submit');
-            btn.innerText = "訂單建立中，準備跳轉金流...";
+            btn.innerText = "訂單連線中，準備前往金流...";
             btn.disabled = true;
             showMsg('sys-msg', '');
 
@@ -152,7 +148,6 @@
 
             fetch(API_URL, {
                 method: 'POST',
-                // 為了避免 GAS 的 CORS 問題，使用 text/plain 傳送 JSON 字串
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ action: 'createOrder', payload: payload })
             })
@@ -161,25 +156,12 @@
                 if(data.error) {
                     btn.innerText = "前往安全結帳";
                     btn.disabled = false;
-                    return showMsg('sys-msg', data.error, true);
+                    return showMsg('sys-msg', "錯誤: " + data.error, true);
                 }
 
-                // 黑貓 WEB API 測試環境網址 (測試無誤後，上線需改為正式網址)
-                const actionUrl = 'https://testapi.presco.net.tw/web/v1/payment'; 
-
-                const formContainer = document.getElementById('blackcat-form-container');
-                let formHtml = `<form id="payForm" action="${actionUrl}" method="POST">`;
-                
-                for (const key in data.paymentParams) {
-                    formHtml += `<input type="hidden" name="${key}" value="${data.paymentParams[key]}">`;
-                }
-                formHtml += `</form>`;
-                
-                formContainer.innerHTML = formHtml;
-                showMsg('sys-msg', '跳轉中，請勿關閉視窗...');
-                
-                // 自動送出表單前往黑貓PAY
-                document.getElementById('payForm').submit();
+                // 🚀 API 架構的最強點：我們直接拿到黑貓專屬結帳網址，無痛跳轉！
+                showMsg('sys-msg', '成功！正在飛往安全結帳頁面...');
+                window.location.href = data.url; 
             })
             .catch(err => {
                 btn.innerText = "前往安全結帳";
