@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>加入特洛伊AI賦能學院 - 會員申請與付款</title>
+    <style>
+        :root {
+            /* 沿用你的色彩計畫 */
+            --primary-yellow: #F59E0B; 
+            --primary-hover: #D97706;  
+            --slate-blue: #1F2937;     
+            --accent-green: #10B981;   
+            --bg-pure: #FFFFFF;        
+            --panel-bg: #FFFFFF;       
+            --input-bg: #F8FAFC;       
+            --text-dark: #111827;      
+            --text-muted: #6B7280;     
+            --glass-border: #CBD5E1;   
+            --radius-soft: 12px; 
+            --danger-color: #EF4444;   
+        }
+        
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body { font-family: 'Microsoft JhengHei', sans-serif; line-height: 1.8; max-width: 800px; margin: 0 auto; padding: 40px 20px; background: var(--bg-pure); color: var(--text-dark); min-height: 100vh; }
+        h1, h2, h3 { color: var(--slate-blue); letter-spacing: 0.05em; font-weight: bold; margin-bottom: 24px; text-align: center; }
+        
+        .section { background: var(--panel-bg); padding: 40px; margin-bottom: 40px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: var(--slate-blue); }
+        .form-group span.req { color: var(--danger-color); }
+        
+        .input-box, select { padding: 14px 18px; border: 1px solid var(--glass-border); border-radius: 8px; font-size: 1rem; font-family: inherit; transition: all 0.3s ease; width: 100%; background: var(--input-bg); color: var(--text-dark); }
+        .input-box:focus, select:focus { outline: none; border-color: var(--primary-yellow); background: var(--bg-pure); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); }
+        
+        button { background: var(--primary-yellow); color: #ffffff; border: none; padding: 16px 28px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: background 0.2s; width: 100%; margin-top: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        button:hover { background: var(--primary-hover); transform: translateY(-1px); } 
+        button:disabled { background: #E5E7EB; color: var(--text-muted); cursor: not-allowed; box-shadow: none; transform: none; }
+        
+        .inline-msg { font-size: 0.9em; font-weight: bold; display: block; margin-top: 10px; text-align: center; min-height: 24px; }
+        .msg-error { color: var(--danger-color); }
+        .msg-success { color: var(--accent-green); }
+
+        .price-display { background: var(--input-bg); padding: 15px; border-radius: 8px; border-left: 4px solid var(--primary-yellow); margin-bottom: 25px; font-size: 1.1rem; font-weight: bold; color: var(--slate-blue); display: flex; justify-content: space-between; align-items: center; }
+        .price-amount { color: var(--primary-hover); font-size: 1.3rem; }
+
+        @media (max-width: 600px) { 
+            body { padding: 20px 15px; } 
+            .section { padding: 25px 20px; } 
+        }
+    </style>
+</head>
+<body>
+
+    <h1>特洛伊AI賦能應用學院</h1>
+    
+    <div class="section">
+        <h3 style="margin-top:0;">💳 零成本高效自動化助理 - 會員申請</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; text-align: center;">
+            填寫下方資料即可前往綠界/黑貓PAY進行安全結帳。<br>付款完成後，系統將自動開通您的權限。
+        </p>
+
+        <div class="form-group">
+            <label>訂閱方案選擇 <span class="req">*</span></label>
+            <select id="subType" onchange="updatePrice()">
+                <option value="年繳">年繳方案 (最划算) - NT$ 9,900</option>
+                <option value="月付">月付方案 (輕鬆入門) - NT$ 990</option>
+            </select>
+        </div>
+
+        <div class="price-display">
+            <span>本次結帳總金額：</span>
+            <span class="price-amount" id="display-price">NT$ 9,900</span>
+        </div>
+
+        <div class="form-group">
+            <label>Email (會員帳號) <span class="req">*</span></label>
+            <input type="email" id="email" class="input-box" placeholder="請輸入您常用的信箱，用於登入與接收通知">
+        </div>
+
+        <div class="form-group">
+            <label>真實姓名 <span class="req">*</span></label>
+            <input type="text" id="name" class="input-box" placeholder="請輸入真實姓名">
+        </div>
+
+        <div class="form-group">
+            <label>聯繫電話 <span class="req">*</span></label>
+            <input type="tel" id="phone" class="input-box" placeholder="0912345678">
+        </div>
+
+        <div class="form-group">
+            <label>現居地</label>
+            <input type="text" id="location" class="input-box" placeholder="例如：台中市北屯區 (選填)">
+        </div>
+
+        <div class="form-group">
+            <label>推薦人帳號 (Email)</label>
+            <input type="email" id="referrer" class="input-box" placeholder="若有推薦人請填寫對方的信箱 (選填)">
+        </div>
+
+        <button id="btn-submit" onclick="submitOrder()">前往安全結帳</button>
+        <span id="sys-msg" class="inline-msg"></span>
+
+        <div id="blackcat-form-container" style="display: none;"></div>
+    </div>
+
+    <script>
+        // 🚨 這裡要換成你的 GAS 部署網址
+        const API_URL = 'https://script.google.com/macros/s/你的部署ID/exec';
+
+        // 價格設定 (請根據你的實際定價修改)
+        const prices = {
+            "年繳": 9900,
+            "月付": 990
+        };
+
+        function updatePrice() {
+            const subType = document.getElementById('subType').value;
+            const price = prices[subType];
+            document.getElementById('display-price').innerText = `NT$ ${price.toLocaleString()}`;
+        }
+
+        function submitOrder() {
+            const email = document.getElementById('email').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const location = document.getElementById('location').value.trim();
+            const referrer = document.getElementById('referrer').value.trim();
+            const subType = document.getElementById('subType').value;
+            const amount = prices[subType];
+
+            // 簡易防呆
+            if(!email || !name || !phone) {
+                return showMsg('sys-msg', '請填寫所有必填欄位 (*)', true);
+            }
+
+            const btn = document.getElementById('btn-submit');
+            btn.innerText = "訂單建立中，準備跳轉金流...";
+            btn.disabled = true;
+            showMsg('sys-msg', '');
+
+            // 整理要送到 GAS 的資料
+            const payload = {
+                email: email,
+                name: name,
+                phone: phone,
+                location: location,
+                referrer: referrer,
+                subType: subType,
+                amount: amount
+            };
+
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'createOrder', payload: payload })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.error) {
+                    btn.innerText = "前往安全結帳";
+                    btn.disabled = false;
+                    return showMsg('sys-msg', data.error, true);
+                }
+
+                // 🌟 收到 GAS 算好的黑貓 PAY 參數後，動態建立表單並自動 submit！
+                const formContainer = document.getElementById('blackcat-form-container');
+                
+                // 黑貓 WEB API 測試環境網址 (正式上線時要改為正式網址)
+                const actionUrl = 'https://testapi.presco.net.tw/web/v1/payment'; 
+
+                let formHtml = `<form id="payForm" action="${actionUrl}" method="POST">`;
+                
+                // 將後端傳來的加密參數全部轉成隱藏欄位
+                for (const key in data.paymentParams) {
+                    formHtml += `<input type="hidden" name="${key}" value="${data.paymentParams[key]}">`;
+                }
+                formHtml += `</form>`;
+                
+                formContainer.innerHTML = formHtml;
+                showMsg('sys-msg', '跳轉中，請勿關閉視窗...');
+                
+                // 自動觸發提交
+                document.getElementById('payForm').submit();
+            })
+            .catch(err => {
+                btn.innerText = "前往安全結帳";
+                btn.disabled = false;
+                showMsg('sys-msg', '連線失敗，請稍後再試', true);
+            });
+        }
+
+        function showMsg(id, text, isError = false) {
+            const el = document.getElementById(id);
+            el.innerText = text;
+            el.className = `inline-msg ${isError ? 'msg-error' : 'msg-success'}`;
+        }
+    </script>
+</body>
+</html>
