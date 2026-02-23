@@ -6,7 +6,6 @@
     <title>加入特洛伊AI賦能學院 - 會員申請與付款</title>
     <style>
         :root {
-            /* 沿用你的色彩計畫 */
             --primary-yellow: #F59E0B; 
             --primary-hover: #D97706;  
             --slate-blue: #1F2937;     
@@ -59,20 +58,20 @@
     <div class="section">
         <h3 style="margin-top:0;">💳 零成本高效自動化助理 - 會員申請</h3>
         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; text-align: center;">
-            填寫下方資料即可前往綠界/黑貓PAY進行安全結帳。<br>付款完成後，系統將自動開通您的權限。
+            填寫下方資料即可前往黑貓PAY進行安全結帳。<br>付款完成後，系統將自動開通您的權限。
         </p>
 
         <div class="form-group">
             <label>訂閱方案選擇 <span class="req">*</span></label>
             <select id="subType" onchange="updatePrice()">
-                <option value="年繳">年繳方案 (最划算) - NT$ 9,900</option>
-                <option value="月付">月付方案 (輕鬆入門) - NT$ 990</option>
+                <option value="年繳">年繳方案 (最划算) - NT$ 6,000</option>
+                <option value="月付">月付方案 (輕鬆入門) - NT$ 600</option>
             </select>
         </div>
 
         <div class="price-display">
             <span>本次結帳總金額：</span>
-            <span class="price-amount" id="display-price">NT$ 9,900</span>
+            <span class="price-amount" id="display-price">NT$ 6,000</span>
         </div>
 
         <div class="form-group">
@@ -107,10 +106,10 @@
     </div>
 
     <script>
-        // 🚨 這裡要換成你的 GAS 部署網址
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyT6wzubudDO4BrFvqNegKsdA4nQEWwGegW1cDeeypNyA5X-kp1YDSfwmMWXEAmE41R/exec';
+        // 您的 GAS 部署網址
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyNfJeqnU6a24SZYKJqlOfezBThwk1uIABsaxG1qvC7Ww3p3heanPF2OR4h9KuKlZOq/exec';
 
-        // 價格設定 (請根據你的實際定價修改)
+        // 價格設定 (已更新)
         const prices = {
             "年繳": 6000,
             "月付": 600
@@ -131,7 +130,7 @@
             const subType = document.getElementById('subType').value;
             const amount = prices[subType];
 
-            // 簡易防呆
+            // 防呆機制
             if(!email || !name || !phone) {
                 return showMsg('sys-msg', '請填寫所有必填欄位 (*)', true);
             }
@@ -141,7 +140,6 @@
             btn.disabled = true;
             showMsg('sys-msg', '');
 
-            // 整理要送到 GAS 的資料
             const payload = {
                 email: email,
                 name: name,
@@ -154,6 +152,8 @@
 
             fetch(API_URL, {
                 method: 'POST',
+                // 為了避免 GAS 的 CORS 問題，使用 text/plain 傳送 JSON 字串
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ action: 'createOrder', payload: payload })
             })
             .then(res => res.json())
@@ -164,15 +164,12 @@
                     return showMsg('sys-msg', data.error, true);
                 }
 
-                // 🌟 收到 GAS 算好的黑貓 PAY 參數後，動態建立表單並自動 submit！
-                const formContainer = document.getElementById('blackcat-form-container');
-                
-                // 黑貓 WEB API 測試環境網址 (正式上線時要改為正式網址)
+                // 黑貓 WEB API 測試環境網址 (測試無誤後，上線需改為正式網址)
                 const actionUrl = 'https://testapi.presco.net.tw/web/v1/payment'; 
 
+                const formContainer = document.getElementById('blackcat-form-container');
                 let formHtml = `<form id="payForm" action="${actionUrl}" method="POST">`;
                 
-                // 將後端傳來的加密參數全部轉成隱藏欄位
                 for (const key in data.paymentParams) {
                     formHtml += `<input type="hidden" name="${key}" value="${data.paymentParams[key]}">`;
                 }
@@ -181,7 +178,7 @@
                 formContainer.innerHTML = formHtml;
                 showMsg('sys-msg', '跳轉中，請勿關閉視窗...');
                 
-                // 自動觸發提交
+                // 自動送出表單前往黑貓PAY
                 document.getElementById('payForm').submit();
             })
             .catch(err => {
