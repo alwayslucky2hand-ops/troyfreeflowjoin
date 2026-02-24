@@ -64,14 +64,14 @@
         <div class="form-group">
             <label>訂閱方案選擇 <span class="req">*</span></label>
             <select id="subType" onchange="updatePrice()">
-                <option value="年繳">年繳方案 (最划算) - NT$ 6,000</option>
-                <option value="月付">月付方案 (輕鬆入門) - NT$ 600</option>
+                <option value="年繳">年繳方案 (最划算，一次付清不中斷) - NT$ 6,600</option>
+                <option value="月付">月付方案 (小額嘗試，零風險) - NT$ 660</option>
             </select>
         </div>
 
         <div class="price-display">
             <span>本次結帳總金額：</span>
-            <span class="price-amount" id="display-price">NT$ 6,000</span>
+            <span class="price-amount" id="display-price">NT$ 6,600</span>
         </div>
 
         <div class="form-group">
@@ -108,8 +108,8 @@
         const API_URL = 'https://script.google.com/macros/s/AKfycbzuSELIGhIC0fwbti7r5cqn9Ww5DtQqxEEA3LR6DNj2u_Dri9QPFhudflNvykY1rUu0/exec';
 
         const prices = {
-            "年繳": 6000,
-            "月付": 600
+            "年繳": 6600,
+            "月付": 660
         };
 
         function updatePrice() {
