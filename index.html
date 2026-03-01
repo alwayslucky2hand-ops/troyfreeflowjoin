@@ -2,53 +2,120 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <title>加入特洛伊AI落地學院 - 會員申請與付款</title>
     <style>
+        /* =========================================
+           特洛伊 AI 落地學院 - App 級別結帳表單
+           ========================================= */
         :root {
             --primary-yellow: #F59E0B; 
             --primary-hover: #D97706;  
             --slate-blue: #1F2937;     
             --accent-green: #10B981;   
-            --bg-pure: #FFFFFF;        
+            --bg-pure: #F3F4F6; /* 外層背景改為微灰，凸顯表單主體 */        
             --panel-bg: #FFFFFF;       
             --input-bg: #F8FAFC;       
             --text-dark: #111827;      
             --text-muted: #6B7280;     
-            --glass-border: #CBD5E1;   
-            --radius-soft: 12px; 
+            --glass-border: #E2E8F0; /* 邊框顏色柔和化 */  
+            --radius-soft: 16px; /* 加大圓角 */
             --danger-color: #EF4444;   
         }
         
         *, *::before, *::after { box-sizing: border-box; }
         
-        body { font-family: 'Microsoft JhengHei', sans-serif; line-height: 1.8; max-width: 800px; margin: 0 auto; padding: 40px 20px; background: var(--bg-pure); color: var(--text-dark); min-height: 100vh; }
-        h1, h2, h3 { color: var(--slate-blue); letter-spacing: 0.05em; font-weight: bold; margin-bottom: 24px; text-align: center; }
+        /* 鎖定 500px 呈現手機 App 視覺 */
+        html { background: var(--bg-pure); }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Microsoft JhengHei', sans-serif; 
+            line-height: 1.6; 
+            max-width: 500px; 
+            margin: 0 auto; 
+            padding: 20px 15px; 
+            background: var(--panel-bg); 
+            color: var(--text-dark); 
+            min-height: 100vh; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.05); /* 電腦版立體陰影 */
+            -webkit-font-smoothing: antialiased; 
+        }
+
+        h1, h2, h3 { color: var(--slate-blue); letter-spacing: 0.05em; font-weight: bold; margin-bottom: 20px; text-align: center; }
+        h1 { font-size: 1.6rem; color: var(--text-dark); margin-top: 10px; margin-bottom: 24px; }
+        h3 { font-size: 1.4rem; }
         
-        .section { background: var(--panel-bg); padding: 40px; margin-bottom: 40px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+        .section { 
+            background: var(--panel-bg); 
+            padding: 24px 20px; 
+            margin-bottom: 24px; 
+            border-radius: var(--radius-soft); 
+            border: 1px solid var(--glass-border); 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); 
+        }
         
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: var(--slate-blue); }
-        .form-group span.req { color: var(--danger-color); }
+        /* 表單元素全面垂直堆疊與滿版 */
+        .form-group { margin-bottom: 20px; display: flex; flex-direction: column; width: 100%; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: var(--slate-blue); font-size: 0.95rem; }
+        .form-group span.req { color: var(--danger-color); font-weight: bold; }
         
-        .input-box, select { padding: 14px 18px; border: 1px solid var(--glass-border); border-radius: 8px; font-size: 1rem; font-family: inherit; transition: all 0.3s ease; width: 100%; background: var(--input-bg); color: var(--text-dark); }
-        .input-box:focus, select:focus { outline: none; border-color: var(--primary-yellow); background: var(--bg-pure); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); }
+        .input-box, select { 
+            padding: 14px 16px; 
+            border: 1px solid var(--glass-border); 
+            border-radius: 10px; 
+            font-size: 16px !important; /* 避免 iOS 點擊輸入框時自動放大畫面 */
+            font-family: inherit; 
+            transition: all 0.3s ease; 
+            width: 100%; 
+            background: var(--input-bg); 
+            color: var(--text-dark); 
+            margin: 0;
+        }
+        .input-box:focus, select:focus { outline: none; border-color: var(--primary-yellow); background: var(--panel-bg); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); }
         
-        button { background: var(--primary-yellow); color: #ffffff; border: none; padding: 16px 28px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: background 0.2s; width: 100%; margin-top: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        button:hover { background: var(--primary-hover); transform: translateY(-1px); } 
+        button { 
+            background: var(--primary-yellow); 
+            color: #ffffff; 
+            border: none; 
+            padding: 16px 20px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 1.1rem; 
+            transition: all 0.2s; 
+            width: 100%; 
+            margin-top: 15px; 
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.25); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+        }
+        button:hover { background: var(--primary-hover); transform: translateY(-2px); } 
         button:disabled { background: #E5E7EB; color: var(--text-muted); cursor: not-allowed; box-shadow: none; transform: none; }
         
-        .inline-msg { font-size: 0.9em; font-weight: bold; display: block; margin-top: 10px; text-align: center; min-height: 24px; }
+        .inline-msg { font-size: 0.95em; font-weight: bold; display: block; margin-top: 12px; text-align: center; min-height: 24px; line-height: 1.5; }
         .msg-error { color: var(--danger-color); }
         .msg-success { color: var(--accent-green); }
 
-        .price-display { background: var(--input-bg); padding: 15px; border-radius: 8px; border-left: 4px solid var(--primary-yellow); margin-bottom: 25px; font-size: 1.1rem; font-weight: bold; color: var(--slate-blue); display: flex; justify-content: space-between; align-items: center; }
-        .price-amount { color: var(--primary-hover); font-size: 1.3rem; }
-
-        @media (max-width: 600px) { 
-            body { padding: 20px 15px; } 
-            .section { padding: 25px 20px; } 
+        /* 金額顯示卡片優化 */
+        .price-display { 
+            background: #FFFBEB; /* 微黃底色提升結帳感 */
+            padding: 16px 20px; 
+            border-radius: 10px; 
+            border: 1px solid #FDE68A;
+            border-left: 5px solid var(--primary-yellow); 
+            margin-bottom: 24px; 
+            font-size: 1.05rem; 
+            font-weight: bold; 
+            color: var(--slate-blue); 
+            display: flex; 
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 10px;
         }
+        .price-amount { color: var(--primary-hover); font-size: 1.4rem; }
+
     </style>
 </head>
 <body>
@@ -57,7 +124,7 @@
     
     <div class="section">
         <h3 style="margin-top:0;"> 會員申請 </h3>
-        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; text-align: center;">
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px; text-align: center;">
             填寫下方資料即可前往黑貓PAY進行安全結帳。<br>付款完成後，系統將自動開通您的權限。
         </p>
 
@@ -76,7 +143,7 @@
 
         <div class="form-group">
             <label>Email (會員帳號) <span class="req">*</span></label>
-            <input type="email" id="email" class="input-box" placeholder="請輸入您常用的信箱，用於登入與接收通知">
+            <input type="email" id="email" class="input-box" placeholder="請輸入您常用的信箱，用於登入">
         </div>
 
         <div class="form-group">
