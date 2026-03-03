@@ -13,13 +13,13 @@
             --primary-hover: #D97706;  
             --slate-blue: #1F2937;     
             --accent-green: #10B981;   
-            --bg-pure: #F3F4F6; /* 外層背景改為微灰，凸顯表單主體 */        
+            --bg-pure: #F3F4F6;        
             --panel-bg: #FFFFFF;       
             --input-bg: #F8FAFC;       
             --text-dark: #111827;      
             --text-muted: #6B7280;     
-            --glass-border: #E2E8F0; /* 邊框顏色柔和化 */  
-            --radius-soft: 16px; /* 加大圓角 */
+            --glass-border: #E2E8F0;   
+            --radius-soft: 16px; 
             --danger-color: #EF4444;   
         }
         
@@ -32,16 +32,39 @@
             line-height: 1.6; 
             max-width: 500px; 
             margin: 0 auto; 
-            padding: 20px 15px; 
+            padding: 0 15px 20px 15px; /* 調整 Padding，讓上方導覽列貼齊邊緣 */
             background: var(--panel-bg); 
             color: var(--text-dark); 
             min-height: 100vh; 
-            box-shadow: 0 0 20px rgba(0,0,0,0.05); /* 電腦版立體陰影 */
+            box-shadow: 0 0 20px rgba(0,0,0,0.05); 
             -webkit-font-smoothing: antialiased; 
+            overflow-x: hidden; /* 防止側邊選單擠出版面 */
         }
 
+        /* --- 導覽選單 UI 設計 --- */
+        .app-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 15px 0; margin-bottom: 24px; border-bottom: 1px dashed var(--glass-border);
+            background: var(--panel-bg); position: sticky; top: 0; z-index: 100;
+        }
+        .app-title { font-size: 1.5rem; margin: 0; text-align: center; color: var(--slate-blue); font-weight: bold; flex-grow: 1; }
+        .hamburger-btn { background: transparent; border: none; padding: 5px; cursor: pointer; box-shadow: none; width: auto; margin: 0; color: var(--slate-blue); font-size: 28px; display: flex; align-items: center; justify-content: center; }
+        .hamburger-btn:hover { background: transparent; transform: scale(1.1); }
+        
+        .sidebar-overlay { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px; height: 100vh; background: rgba(0,0,0,0.6); z-index: 999; display: none; opacity: 0; transition: opacity 0.2s ease; }
+        .sidebar-overlay.active { display: block; opacity: 1; }
+        
+        .sidebar-menu { position: fixed; top: 0; left: 50%; margin-left: calc(min(100vw, 500px) / -2); width: 260px; height: 100vh; background: #28292A; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease; overflow-y: auto; display: flex; flex-direction: column; padding-top: 10px; box-shadow: 4px 0 15px rgba(0,0,0,0.5); }
+        .sidebar-menu.active { opacity: 1; visibility: visible; }
+        .sidebar-header { padding: 10px 20px; display: flex; align-items: center; margin-bottom: 10px; }
+        .close-btn { background: rgba(255,255,255,0.1); border: none; color: #E8EAED; font-size: 20px; cursor: pointer; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: none; padding: 0; margin: 0; transition: background 0.2s; }
+        .close-btn:hover { background: rgba(255,255,255,0.2); transform: none; }
+        .sidebar-link { display: block; padding: 16px 24px; color: #E8EAED; text-decoration: none; font-size: 1.1rem; transition: background 0.2s, color 0.2s; font-weight: normal; }
+        .sidebar-link:hover { background: rgba(255,255,255,0.05); }
+        .sidebar-link.active { color: #8AB4F8; font-weight: bold; }
+
+        /* --- 原本表單 UI 設計 --- */
         h1, h2, h3 { color: var(--slate-blue); letter-spacing: 0.05em; font-weight: bold; margin-bottom: 20px; text-align: center; }
-        h1 { font-size: 1.6rem; color: var(--text-dark); margin-top: 10px; margin-bottom: 24px; }
         h3 { font-size: 1.4rem; }
         
         .section { 
@@ -53,7 +76,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); 
         }
         
-        /* 表單元素全面垂直堆疊與滿版 */
         .form-group { margin-bottom: 20px; display: flex; flex-direction: column; width: 100%; }
         .form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: var(--slate-blue); font-size: 0.95rem; }
         .form-group span.req { color: var(--danger-color); font-weight: bold; }
@@ -62,7 +84,7 @@
             padding: 14px 16px; 
             border: 1px solid var(--glass-border); 
             border-radius: 10px; 
-            font-size: 16px !important; /* 避免 iOS 點擊輸入框時自動放大畫面 */
+            font-size: 16px !important; 
             font-family: inherit; 
             transition: all 0.3s ease; 
             width: 100%; 
@@ -96,9 +118,8 @@
         .msg-error { color: var(--danger-color); }
         .msg-success { color: var(--accent-green); }
 
-        /* 金額顯示卡片優化 */
         .price-display { 
-            background: #FFFBEB; /* 微黃底色提升結帳感 */
+            background: #FFFBEB; 
             padding: 16px 20px; 
             border-radius: 10px; 
             border: 1px solid #FDE68A;
@@ -115,12 +136,28 @@
             gap: 10px;
         }
         .price-amount { color: var(--primary-hover); font-size: 1.4rem; }
-
     </style>
 </head>
 <body>
 
-    <h1>特洛伊AI應用實戰學院</h1>
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleMenu()"></div>
+
+    <div class="sidebar-menu" id="sidebar-menu">
+        <div class="sidebar-header"><button class="close-btn" onclick="toggleMenu()">✕</button></div>
+        <a href="https://sites.google.com/view/troyaifreeflow/ai-courses" class="sidebar-link">實體開課</a>
+        <a href="https://sites.google.com/view/troyaifreeflow/why-ai-ffs" class="sidebar-link">學院初心</a>
+        <a href="https://sites.google.com/view/troyaifreeflow/ai-vibe-coding-app-blog" class="sidebar-link">AI筆記</a>
+        <a href="https://sites.google.com/view/troyaifreeflow/vibe-coding-qa" class="sidebar-link">論壇交流</a>
+        <a href="https://sites.google.com/view/troyaifreeflow/ai-vibe-coding-live-streaming" class="sidebar-link">影音直播</a>
+        <a href="https://alwayslucky2hand-ops.github.io/troyffs-learningbuddy/" class="sidebar-link">陪跑日誌</a>
+        <a href="https://alwayslucky2hand-ops.github.io/troyfreeflowjoin/" class="sidebar-link active">加入會員</a>
+        <a href="https://sites.google.com/view/troyaifreeflow/ai-ffs-membership" class="sidebar-link">會員專區</a>
+    </div>
+
+    <div class="app-header">
+        <button class="hamburger-btn" onclick="toggleMenu()">☰</button>
+        <h1 class="app-title">特洛伊AI應用實戰學院</h1>
+        <div style="width: 28px;"></div> </div>
     
     <div class="section">
         <h3 style="margin-top:0;"> 會員申請 </h3>
@@ -171,7 +208,27 @@
     </div>
 
     <script>
-        // 您的 GAS 部署網址 (確認無誤)
+        // ==========================================
+        // UI 導覽列切換邏輯
+        // ==========================================
+        function toggleMenu() {
+            const menu = document.getElementById('sidebar-menu');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (menu.classList.contains('active')) {
+                // 關閉選單
+                menu.classList.remove('active');
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.style.display = 'none', 200); 
+            } else {
+                // 開啟選單
+                overlay.style.display = 'block';
+                setTimeout(() => { menu.classList.add('active'); overlay.style.opacity = '1'; }, 10);
+            }
+        }
+
+        // ==========================================
+        // 結帳邏輯
+        // ==========================================
         const API_URL = 'https://script.google.com/macros/s/AKfycby4xzl-z8i1ftoYfnm-mT572K-gZElLs73Yjy2K8wm9cNf2IObvT9cg26Xg4Rkco1Eu/exec';
 
         const prices = {
@@ -226,7 +283,6 @@
                     return showMsg('sys-msg', "錯誤: " + data.error, true);
                 }
 
-                // 🚀 API 架構的最強點：不再依賴表單，直接拿到專屬結帳網址跳轉！
                 showMsg('sys-msg', '連線成功！正在飛往安全結帳頁面...');
                 window.location.href = data.url; 
             })
